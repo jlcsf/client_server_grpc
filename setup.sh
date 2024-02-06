@@ -1,0 +1,9 @@
+python -m grpc_tools.protoc --proto_path=./protos/ error.proto --python_out=./output/ --grpc_python_out=./output/
+python -m grpc_tools.protoc --proto_path=./protos/ genop.proto --python_out=./output/ --grpc_python_out=./output/
+python -m grpc_tools.protoc --proto_path=./protos/ image.proto --python_out=./output/ --grpc_python_out=./output/
+python -m grpc_tools.protoc --proto_path=./protos/ profiling.proto --python_out=./output/ --grpc_python_out=./output/
+python -m grpc_tools.protoc --proto_path=./protos/ resources.proto --python_out=./output/ --grpc_python_out=./output/
+python -m grpc_tools.protoc --proto_path=./protos/ session.proto --python_out=./output/ --grpc_python_out=./output/
+python -m grpc_tools.protoc --proto_path=./protos/ tensorflow.proto --python_out=./output/ --grpc_python_out=./output/
+python -m grpc_tools.protoc --proto_path=./protos/ torch.proto --python_out=./output/ --grpc_python_out=./output/
+python -m grpc_tools.protoc --proto_path=./protos/ agent.proto --python_out=./output/ --grpc_python_out=./output/
