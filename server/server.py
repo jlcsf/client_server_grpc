@@ -74,6 +74,28 @@ class VaccelService(pb2_grpc.VaccelAgentServicer):
         output_tag_bytes = output_tag.encode('utf-8')
         response = rpc_image.ImageClassificationResponse(tags = output_tag_bytes)
         return response
+
+    def TensorflowModelLoad(self, request, context):
+        print("This loads in a tensorflow model")
+        session_id = request.session_id
+        model_id = request.model_id
+        # TODO: load tensorflow model
+        response = 0
+        return response
+    
+    def TensorflowModelUnLoad(self, request, context):
+        print("Unload tensorflow model")
+        # TODO: unload tensorflow model
+        response = 0
+        return response
+    
+    def TensorflowModelRun(self, request, context):
+        # TODO : run tensforflow model
+        response = 0
+        return response
+        
+    
+    # TODO: Add implemnetations for tensforflow bindings, genop, torch, profiling
                 
 
 def serve():

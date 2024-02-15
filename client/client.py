@@ -12,6 +12,9 @@ import resources_pb2 as Resources
 import genop_pb2 as Genop
 import profiling_pb2 as Profiling
 import image_pb2 as Image
+import tensorflow_pb2 as TF
+import torch_pb2 as Torch
+
 import PIL.Image
 
 
@@ -87,6 +90,36 @@ class VaccelClient(object):
         request = Image.ImageClassificationRequest(session_id = session_id, image = image)
         response = self.stub.ImageClassification(request)
         return response.tags
+
+    def tensorflow_model_load(self, session_id, model_id):
+        request = TF.TensorflowModelLoadRequest(session_id = session_id, model_id = model_id)
+        response = self.stub.TensorflowModelLoad(request)
+        return response
+    
+    def tensorflow_model_unload(self, session_id, model_id):
+        request = TF.TensorflowModelUnloadRequest(session_id = session_id, model_id = model_id)
+        response = self.stub.TensorflowModelUnload(request)
+        return response
+
+    def tensorflow_model_run(self, *args):
+        request = TF.TensorflowModelRunRequest(*args)
+        response = self.stub.TensorflowModelRun(request)
+        return response
+    
+    def torch_jit_load_forward(self, *args):
+        request = Torch.TorchJitloadForwardRequest(*args)
+        response = self.stub.TorchJitloadForward(request)
+        return response
+    
+    def genop(self, *args):
+        request = Genop.GenopRequest(*args)
+        response = self.stub.Genop(request)
+        return response
+    
+    def get_timers(self, session_id):
+        request = Profiling.ProfilingRequest(session_id  = session_id)
+        response = self.stub.GetTimers(request)
+        return response
         
 
 if __name__ == '__main__':
