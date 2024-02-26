@@ -17,8 +17,9 @@ import PIL.Image
 from vaccel.session import Session
 from vaccel.noop import Noop
 from vaccel.image import ImageClassify, ImageDetect, ImageSegment, ImagePose, ImageDepth
-from vaccel import image_genop as genimg
-
+import vaccel.image_genop as genimg
+from vaccel.exec import Exec, Exec_with_resource
+from vaccel.genop import Genop 
 
 
 class VaccelService(pb2_grpc.VaccelAgentServicer):
@@ -92,6 +93,15 @@ class VaccelService(pb2_grpc.VaccelAgentServicer):
     def TensorflowModelRun(self, request, context):
         # TODO : run tensforflow model
         response = 0
+        return response
+    
+    def Genop(self, request, context):
+        session_id = request.session_id
+        arg_read = request.read_args
+        arg_write = request.write_args
+
+        response = Genop.genop(self.sess, arg_read, arg_write)
+
         return response
         
     
