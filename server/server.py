@@ -11,6 +11,7 @@ import agent_pb2 as pb2
 import session_pb2 as rpc_session
 import resources_pb2 as rpc_resource
 import image_pb2 as rpc_image
+import genop_pb2 as rpc_genop
 import PIL.Image
 
 
@@ -19,7 +20,7 @@ from vaccel.noop import Noop
 from vaccel.image import ImageClassify, ImageDetect, ImageSegment, ImagePose, ImageDepth
 import vaccel.image_genop as genimg
 from vaccel.exec import Exec, Exec_with_resource
-from vaccel.genop import Genop 
+from vaccel.genop import Genop, VaccelArg, VaccelArgList, VaccelOpType
 
 
 class VaccelService(pb2_grpc.VaccelAgentServicer):
@@ -94,15 +95,40 @@ class VaccelService(pb2_grpc.VaccelAgentServicer):
         # TODO : run tensforflow model
         response = 0
         return response
-    
+        
     def Genop(self, request, context):
         session_id = request.session_id
         arg_read = request.read_args
         arg_write = request.write_args
+        
+        
+        optype = int.from_bytes(arg_read[0].buf, byteorder='little')
+        print("Contents of arg_read[0]:", optype)
 
+        args_remaining = [VaccelArg(data = arg.buf) for arg in arg_read[1:]]
+        
+        arg_read = [VaccelArg(optype)] + args_remaining
+        arg_write = [VaccelArg(data = arg.buf) for arg in arg_write]
+        
         response = Genop.genop(self.sess, arg_read, arg_write)
+        print("----------")
+        print(arg_write[0].content)
+        print("----------")
+        
+        arg_write_copy = []
+        for i in range(len(arg_write)):
+            genop_arg = rpc_genop.GenopArg()
+            genop_arg.argtype = 2
+            genop_arg.size = arg_write[i].size
+            genop_arg.buf = bytes(arg_write[i].content, 'utf-8')
+            arg_write_copy.append(genop_arg)
+
+        response = rpc_genop.GenopResponse()
+        for genop_arg in arg_write_copy:
+            response.genop_result.write_args.extend([genop_arg])
 
         return response
+
         
     
     # TODO: Add implemnetations for tensforflow bindings, genop, torch, profiling

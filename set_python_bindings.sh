@@ -1,4 +1,4 @@
-git clone https://github.com/nubificus/python-vaccel
+git clone -b feat_args https://github.com/nubificus/python-vaccel
 cd python-vaccel
 python3 builder.py
 pip3 install build
