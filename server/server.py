@@ -12,6 +12,8 @@ import session_pb2 as rpc_session
 import resources_pb2 as rpc_resource
 import image_pb2 as rpc_image
 import genop_pb2 as rpc_genop
+import tensorflow_pb2 as rpc_tf
+import error_pb2 as rpc_error
 import PIL.Image
 
 
@@ -21,12 +23,13 @@ from vaccel.image import ImageClassify, ImageDetect, ImageSegment, ImagePose, Im
 import vaccel.image_genop as genimg
 from vaccel.exec import Exec, Exec_with_resource
 from vaccel.genop import Genop, VaccelArg, VaccelArgList, VaccelOpType
-
+from vaccel.tensorflow import Tensor, TensorType, Node, TensorFlowModel
 
 class VaccelService(pb2_grpc.VaccelAgentServicer):
 
     def __init__(self, *args, **kwargs):
         self.sess = None
+        self.tf_model = None
 
     def CreateSession(self, request, context):
         flags = request.flags  
@@ -81,19 +84,69 @@ class VaccelService(pb2_grpc.VaccelAgentServicer):
         print("This loads in a tensorflow model")
         session_id = request.session_id
         model_id = request.model_id
-        # TODO: load tensorflow model
-        response = 0
+        
+        
+        ### here let model id set the path of the model we want to use...
+        
+        self.model_tf = TensorFlowModel()
+        self.model_tf.model_set_path("/usr/local/share/models/tf/lstm2")
+        self.model_tf.model_register()
+        self.sess.register_resource(self.model_tf)
+        self.model_tf.from_session(self.sess, "/usr/local/share/models/tf/lstm2")
+        
+        error = 0
+        if not self.model_tf.is_registered(self.sess):
+            error = 1
+
+        response = rpc_tf.TensorflowModelLoadResponse()
+        
+        if error: 
+            response.error = rpc_error.agent_error()
+            
+    
+        ## send back graph definition?
+            
         return response
     
-    def TensorflowModelUnLoad(self, request, context):
+    def TensorflowModelUnload(self, request, context):
         print("Unload tensorflow model")
-        # TODO: unload tensorflow model
-        response = 0
+        session_id = request.session_id
+        model_id = request.model_id
+        
+        self.sess.unregister_resource(self.model_tf)
+        response = rpc_tf.TensorflowModelUnloadResponse()
         return response
     
     def TensorflowModelRun(self, request, context):
-        # TODO : run tensforflow model
-        response = 0
+        session_id = request.session_id
+        model_id = request.model_id
+        run_options = request.model_id
+        in_nodes = request.in_nodes
+        in_tensors = request.in_tensors
+        out_nodes = request.out_nodes
+        
+        print("request unpacked")
+        
+
+        # in_nodes = [Node(node[0],node[1]) for node in in_nodes]
+        # out_nodes = [Node(node[0], node[1]) for node in out_nodes]
+        
+        ## manually create the tensor for now
+        # t = Tensor([1, 30], TensorType.FLOAT)
+        # t.data = [1.0] * 30
+        # t.dims = [1, 30]
+
+        # in_tensors = [t]
+        
+        
+        output = self.model_tf.run(self.sess, in_nodes=in_nodes, in_tensors=in_tensors, out_nodes=out_nodes)
+        
+        for t in output:
+            print(t.__str__())
+            offset = t.data
+            print(offset)
+        
+        response = rpc_tf.TensorflowModelRunResponse()
         return response
         
     def Genop(self, request, context):

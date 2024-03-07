@@ -101,9 +101,34 @@ class VaccelClient(object):
         response = self.stub.TensorflowModelUnload(request)
         return response
 
-    def tensorflow_model_run(self, *args):
-        request = TF.TensorflowModelRunRequest(*args)
+    def tensorflow_model_run(self, session_id, model_id, run_options, in_nodes, in_tensors, out_nodes):
+        request = TF.TensorflowModelRunRequest()
+        request.session_id = session_id
+        request.model_id = model_id
+        request.run_options = run_options
+            
+        for node_name, node_id in in_nodes:
+            node = TF.TFNode()
+            node.name = node_name
+            node.id = node_id
+            request.in_nodes.add().CopyFrom(node)
+
+        for node_name, node_id in out_nodes:
+            node = TF.TFNode()
+            node.name = node_name
+            node.id = node_id
+            request.out_nodes.add().CopyFrom(node)
+            
+        print("Test")   
+        tf_tensors = TF.TFTensor()
+        tf_tensors.data = bytes([1]*30)
+        tf_tensors.dims.extend([1, 30])  # Use extend method to add multiple elements to the repeated field
+        print("Test")
+        tf_tensors.type = 1
+        print("Test")
+        request.in_tensors.extend([tf_tensors])  # Provide an iterable object (list) to the extend method
         response = self.stub.TensorflowModelRun(request)
+        print("Test")
         return response
     
     def torch_jit_load_forward(self, *args):
@@ -138,6 +163,31 @@ if __name__ == '__main__':
 
         response = client.register_resource(resource_id, session_id)
         print("resource registered")
+        
+        response = client.tensorflow_model_load(session_id=session_id, model_id= 1)
+        print("model created")
+        
+        
+        
+        
+        nname = "serving_default_input_1"
+        nid = 0
+        n1 = (nname, nid)
+        in_nodes = [n1] 
+        nname = "StatefulPartitionedCall"
+        nid = 0
+        n2 = (nname, nid)
+        out_nodes = [n2]
+        
+        in_tensors = [1] ### TODO
+    
+        response = client.tensorflow_model_run(session_id=session_id, model_id=int(1), run_options=bytes(1), in_nodes=in_nodes, in_tensors=in_tensors, out_nodes=out_nodes)
+        print("model run complete")
+        
+        
+        
+        response = client.tensorflow_model_unload(session_id=session_id, model_id=1)
+        print("model unloaded")
 
         response = client.unregister_resource(resource_id, session_id)
         print("resource unregistered")
