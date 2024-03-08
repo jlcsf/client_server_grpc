@@ -128,15 +128,19 @@ class VaccelService(pb2_grpc.VaccelAgentServicer):
         print("request unpacked")
         
 
-        # in_nodes = [Node(node[0],node[1]) for node in in_nodes]
-        # out_nodes = [Node(node[0], node[1]) for node in out_nodes]
-        
-        ## manually create the tensor for now
-        # t = Tensor([1, 30], TensorType.FLOAT)
-        # t.data = [1.0] * 30
-        # t.dims = [1, 30]
+        in_nodes = [Node(node.name,node.id) for node in in_nodes]
+        out_nodes = [Node(node.name, node.id) for node in out_nodes]
 
-        # in_tensors = [t]
+
+        ## manually create the tensor for now
+        t = Tensor(in_tensors[0].dims, in_tensors[0].type)
+        
+        t.data = [1.0] * 30 ### manual instead of in_tensors.data
+        
+        t.dims = list(in_tensors[0].dims)
+
+        in_tensors = [t]
+    
         
         
         output = self.model_tf.run(self.sess, in_nodes=in_nodes, in_tensors=in_tensors, out_nodes=out_nodes)
