@@ -185,6 +185,14 @@ class VaccelService(pb2_grpc.VaccelAgentServicer):
             response.genop_result.write_args.extend([genop_arg])
 
         return response
+    
+    
+    
+    def Profiling(self, request, context):
+        session_id = request.session_id
+        response = 1
+        return response
+    
 
         
     

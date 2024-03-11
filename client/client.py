@@ -119,16 +119,12 @@ class VaccelClient(object):
             node.id = node_id
             request.out_nodes.add().CopyFrom(node)
             
-        print("Test")   
         tf_tensors = TF.TFTensor()
         tf_tensors.data = bytes([1]*30)
-        tf_tensors.dims.extend([1, 30])  # Use extend method to add multiple elements to the repeated field
-        print("Test")
+        tf_tensors.dims.extend([1, 30]) 
         tf_tensors.type = 1
-        print("Test")
-        request.in_tensors.extend([tf_tensors])  # Provide an iterable object (list) to the extend method
+        request.in_tensors.extend([tf_tensors]) 
         response = self.stub.TensorflowModelRun(request)
-        print("Test")
         return response
     
     def torch_jit_load_forward(self, *args):
@@ -179,7 +175,7 @@ if __name__ == '__main__':
         n2 = (nname, nid)
         out_nodes = [n2]
         
-        in_tensors = [1] ### TODO
+        in_tensors = [1]
     
         response = client.tensorflow_model_run(session_id=session_id, model_id=int(1), run_options=bytes(1), in_nodes=in_nodes, in_tensors=in_tensors, out_nodes=out_nodes)
         print("model run complete")
