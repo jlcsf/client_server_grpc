@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bimage.proto\x12\x06vaccel\"?\n\x1aImageClassificationRequest\x12\x12\n\nsession_id\x18\x01 \x01(\r\x12\r\n\x05image\x18\x02 \x01(\x0c\"+\n\x1bImageClassificationResponse\x12\x0c\n\x04tags\x18\x01 \x01(\x0c\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0bimage.proto\x12\x06vaccel\"?\n\x1aImageClassificationRequest\x12\x12\n\nsession_id\x18\x01 \x01(\r\x12\r\n\x05image\x18\x02 \x01(\x0c\"+\n\x1bImageClassificationResponse\x12\x0c\n\x04tags\x18\x01 \x01(\x0c\"7\n\x12ImageDetectRequest\x12\x12\n\nsession_id\x18\x01 \x01(\r\x12\r\n\x05image\x18\x02 \x01(\x0c\"#\n\x13ImageDetectResponse\x12\x0c\n\x04tags\x18\x01 \x01(\x0c\x62\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -25,4 +25,8 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _globals['_IMAGECLASSIFICATIONREQUEST']._serialized_end=86
   _globals['_IMAGECLASSIFICATIONRESPONSE']._serialized_start=88
   _globals['_IMAGECLASSIFICATIONRESPONSE']._serialized_end=131
+  _globals['_IMAGEDETECTREQUEST']._serialized_start=133
+  _globals['_IMAGEDETECTREQUEST']._serialized_end=188
+  _globals['_IMAGEDETECTRESPONSE']._serialized_start=190
+  _globals['_IMAGEDETECTRESPONSE']._serialized_end=225
 # @@protoc_insertion_point(module_scope)

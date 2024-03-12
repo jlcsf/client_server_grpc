@@ -61,6 +61,11 @@ class VaccelAgentStub(object):
                 request_serializer=image__pb2.ImageClassificationRequest.SerializeToString,
                 response_deserializer=image__pb2.ImageClassificationResponse.FromString,
                 )
+        self.ImageDetect = channel.unary_unary(
+                '/vaccel.VaccelAgent/ImageDetect',
+                request_serializer=image__pb2.ImageDetectRequest.SerializeToString,
+                response_deserializer=image__pb2.ImageDetectResponse.FromString,
+                )
         self.TensorflowModelLoad = channel.unary_unary(
                 '/vaccel.VaccelAgent/TensorflowModelLoad',
                 request_serializer=tensorflow__pb2.TensorflowModelLoadRequest.SerializeToString,
@@ -143,6 +148,12 @@ class VaccelAgentServicer(object):
     def ImageClassification(self, request, context):
         """Image Classification API
         """
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ImageDetect(self, request, context):
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -231,6 +242,11 @@ def add_VaccelAgentServicer_to_server(servicer, server):
                     servicer.ImageClassification,
                     request_deserializer=image__pb2.ImageClassificationRequest.FromString,
                     response_serializer=image__pb2.ImageClassificationResponse.SerializeToString,
+            ),
+            'ImageDetect': grpc.unary_unary_rpc_method_handler(
+                    servicer.ImageDetect,
+                    request_deserializer=image__pb2.ImageDetectRequest.FromString,
+                    response_serializer=image__pb2.ImageDetectResponse.SerializeToString,
             ),
             'TensorflowModelLoad': grpc.unary_unary_rpc_method_handler(
                     servicer.TensorflowModelLoad,
@@ -405,6 +421,23 @@ class VaccelAgent(object):
         return grpc.experimental.unary_unary(request, target, '/vaccel.VaccelAgent/ImageClassification',
             image__pb2.ImageClassificationRequest.SerializeToString,
             image__pb2.ImageClassificationResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ImageDetect(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/vaccel.VaccelAgent/ImageDetect',
+            image__pb2.ImageDetectRequest.SerializeToString,
+            image__pb2.ImageDetectResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

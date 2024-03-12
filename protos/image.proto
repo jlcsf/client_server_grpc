@@ -27,7 +27,7 @@ message ImageClassificationResponse {
 
 message ImageDetectRequest {
 	uint32 session_id = 1;
-	bytes images = 2;
+	bytes image = 2;
 }
 
 message ImageDetectResponse {

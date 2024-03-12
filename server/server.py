@@ -79,6 +79,15 @@ class VaccelService(pb2_grpc.VaccelAgentServicer):
         output_tag_bytes = output_tag.encode('utf-8')
         response = rpc_image.ImageClassificationResponse(tags = output_tag_bytes)
         return response
+    
+    def ImageDetect(self, request, context):
+        print("This will detect an image and then return the tag back to the client")
+        image = request.image
+        session_id = request.session_id
+        output_tag = genimg.ImageDetect.detect(image=image)
+        output_tag_bytes = output_tag.encode('utf-8')
+        response = rpc_image.ImageDetectResponse(tags = output_tag_bytes)
+        return response
 
     def TensorflowModelLoad(self, request, context):
         print("This loads in a tensorflow model")

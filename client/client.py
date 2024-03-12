@@ -206,6 +206,9 @@ if __name__ == '__main__':
         response = client.image_classification(session_id, img_bytes)
         print(response.decode('utf-8'))
         
+        response = client.image_detect(session_id, img_bytes)
+        print(response.decode('utf-8'))
+        
         response = client.destroy_session(session_id)
         print("session destroyed")
         
