@@ -88,6 +88,33 @@ class VaccelService(pb2_grpc.VaccelAgentServicer):
         output_tag_bytes = output_tag.encode('utf-8')
         response = rpc_image.ImageDetectResponse(tags = output_tag_bytes)
         return response
+    
+    def ImageDepth(self, request, context):
+        print("This will perform image depth operation on the image and send the tag back to the client")
+        image = request.image
+        session_id = request.session_id
+        output_tag = genimg.ImageDepth.depth(image=image)
+        output_tag_bytes = output_tag.encode('utf-8')
+        response = rpc_image.ImageDepthResponse(tags = output_tag_bytes)
+        return response
+    
+    def ImagePose(self, request, context):
+        print("This will perform image pose operation on the image and send the tag back to the client")
+        image = request.image
+        session_id = request.session_id
+        output_tag = genimg.ImagePose.pose(image=image)
+        output_tag_bytes = output_tag.encode('utf-8')
+        response = rpc_image.ImagePoseResponse(tags = output_tag_bytes)
+        return response
+
+    def ImageSegment(self, request, context):
+        print("This will perform image segment operation on the image and send the tag back to the client")
+        image = request.image
+        session_id = request.session_id
+        output_tag = genimg.ImageSegment.segment(image=image)
+        output_tag_bytes = output_tag.encode('utf-8')
+        response = rpc_image.ImageSegmentResponse(tags = output_tag_bytes)
+        return response
 
     def TensorflowModelLoad(self, request, context):
         print("This loads in a tensorflow model")
@@ -195,8 +222,7 @@ class VaccelService(pb2_grpc.VaccelAgentServicer):
 
         return response
     
-    
-    
+
     def Profiling(self, request, context):
         session_id = request.session_id
         response = 1

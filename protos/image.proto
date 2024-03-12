@@ -33,3 +33,30 @@ message ImageDetectRequest {
 message ImageDetectResponse {
 	bytes tags = 1;
 }
+
+message ImagePoseRequest {
+	uint32 session_id = 1;
+	bytes image = 2;
+}
+
+message ImagePoseResponse {
+	bytes tags = 1;
+}
+
+message ImageDepthRequest {
+	uint32 session_id = 1;
+	bytes image = 2;
+}
+
+message ImageDepthResponse {
+	bytes tags = 1;
+}
+
+message ImageSegmentRequest {
+	uint32 session_id = 1;
+	bytes image = 2;
+}
+
+message ImageSegmentResponse {
+	bytes tags = 1;
+}

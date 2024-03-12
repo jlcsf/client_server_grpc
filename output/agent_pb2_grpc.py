@@ -66,6 +66,21 @@ class VaccelAgentStub(object):
                 request_serializer=image__pb2.ImageDetectRequest.SerializeToString,
                 response_deserializer=image__pb2.ImageDetectResponse.FromString,
                 )
+        self.ImageSegment = channel.unary_unary(
+                '/vaccel.VaccelAgent/ImageSegment',
+                request_serializer=image__pb2.ImageSegmentRequest.SerializeToString,
+                response_deserializer=image__pb2.ImageSegmentResponse.FromString,
+                )
+        self.ImagePose = channel.unary_unary(
+                '/vaccel.VaccelAgent/ImagePose',
+                request_serializer=image__pb2.ImagePoseRequest.SerializeToString,
+                response_deserializer=image__pb2.ImagePoseRequest.FromString,
+                )
+        self.ImageDepth = channel.unary_unary(
+                '/vaccel.VaccelAgent/ImageDepth',
+                request_serializer=image__pb2.ImageDepthRequest.SerializeToString,
+                response_deserializer=image__pb2.ImageDepthRequest.FromString,
+                )
         self.TensorflowModelLoad = channel.unary_unary(
                 '/vaccel.VaccelAgent/TensorflowModelLoad',
                 request_serializer=tensorflow__pb2.TensorflowModelLoadRequest.SerializeToString,
@@ -153,6 +168,24 @@ class VaccelAgentServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def ImageDetect(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ImageSegment(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ImagePose(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def ImageDepth(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -247,6 +280,21 @@ def add_VaccelAgentServicer_to_server(servicer, server):
                     servicer.ImageDetect,
                     request_deserializer=image__pb2.ImageDetectRequest.FromString,
                     response_serializer=image__pb2.ImageDetectResponse.SerializeToString,
+            ),
+            'ImageSegment': grpc.unary_unary_rpc_method_handler(
+                    servicer.ImageSegment,
+                    request_deserializer=image__pb2.ImageSegmentRequest.FromString,
+                    response_serializer=image__pb2.ImageSegmentResponse.SerializeToString,
+            ),
+            'ImagePose': grpc.unary_unary_rpc_method_handler(
+                    servicer.ImagePose,
+                    request_deserializer=image__pb2.ImagePoseRequest.FromString,
+                    response_serializer=image__pb2.ImagePoseRequest.SerializeToString,
+            ),
+            'ImageDepth': grpc.unary_unary_rpc_method_handler(
+                    servicer.ImageDepth,
+                    request_deserializer=image__pb2.ImageDepthRequest.FromString,
+                    response_serializer=image__pb2.ImageDepthRequest.SerializeToString,
             ),
             'TensorflowModelLoad': grpc.unary_unary_rpc_method_handler(
                     servicer.TensorflowModelLoad,
@@ -438,6 +486,57 @@ class VaccelAgent(object):
         return grpc.experimental.unary_unary(request, target, '/vaccel.VaccelAgent/ImageDetect',
             image__pb2.ImageDetectRequest.SerializeToString,
             image__pb2.ImageDetectResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ImageSegment(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/vaccel.VaccelAgent/ImageSegment',
+            image__pb2.ImageSegmentRequest.SerializeToString,
+            image__pb2.ImageSegmentResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ImagePose(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/vaccel.VaccelAgent/ImagePose',
+            image__pb2.ImagePoseRequest.SerializeToString,
+            image__pb2.ImagePoseRequest.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ImageDepth(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/vaccel.VaccelAgent/ImageDepth',
+            image__pb2.ImageDepthRequest.SerializeToString,
+            image__pb2.ImageDepthRequest.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 

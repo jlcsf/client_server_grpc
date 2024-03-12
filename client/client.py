@@ -95,6 +95,21 @@ class VaccelClient(object):
         request = Image.ImageDetectRequest(session_id=session_id, image=image)
         response = self.stub.ImageDetect(request)
         return response.tags
+    
+    def image_pose(self, session_id, image):
+        request = Image.ImagePoseRequest(session_id=session_id,image=image)
+        response = self.stub.ImagePose(request)
+        return response.tags
+    
+    def image_segment(self, session_id, image):
+        request = Image.ImageSegmentRequest(session_id=session_id, image=image)
+        response = self.stub.ImageSegment(request)
+        return response.tags
+
+    def image_depth(self, session_id, image):
+        request = Image.ImageDepthRequest(session_id=session_id,image=image)
+        response = self.stub.ImageDepth(request)
+        return response.tags
 
     def tensorflow_model_load(self, session_id, model_id):
         request = TF.TensorflowModelLoadRequest(session_id = session_id, model_id = model_id)
@@ -168,9 +183,6 @@ if __name__ == '__main__':
         response = client.tensorflow_model_load(session_id=session_id, model_id= 1)
         print("model created")
         
-        
-        
-        
         nname = "serving_default_input_1"
         nid = 0
         n1 = (nname, nid)
@@ -184,7 +196,6 @@ if __name__ == '__main__':
     
         response = client.tensorflow_model_run(session_id=session_id, model_id=int(1), run_options=bytes(1), in_nodes=in_nodes, in_tensors=in_tensors, out_nodes=out_nodes)
         print("model run complete")
-        
         
         
         response = client.tensorflow_model_unload(session_id=session_id, model_id=1)
@@ -203,11 +214,26 @@ if __name__ == '__main__':
         img.save(img_byte_array, format='JPEG')
         img_bytes = img_byte_array.getvalue()
         
+        print("Performing image classification")
         response = client.image_classification(session_id, img_bytes)
         print(response.decode('utf-8'))
         
+        print("Performing image detect")
         response = client.image_detect(session_id, img_bytes)
         print(response.decode('utf-8'))
+        
+        # print("Performing image pose")
+        # response = client.image_pose(session_id, img_bytes)
+        # print(response.decode('utf-8'))
+
+        # print("Performing image detect")
+        # response = client.image_depth(session_id, img_bytes)
+        # print(response.decode('utf-8'))
+
+        print("Performing image segment")
+        response = client.image_segment(session_id, img_bytes)
+        print(response.decode('utf-8'))
+        
         
         response = client.destroy_session(session_id)
         print("session destroyed")
