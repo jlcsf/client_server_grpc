@@ -90,6 +90,11 @@ class VaccelClient(object):
         request = Image.ImageClassificationRequest(session_id = session_id, image = image)
         response = self.stub.ImageClassification(request)
         return response.tags
+    
+    def image_detect(self, session_id, image):
+        request = Image.ImageDetectRequest(session_id=session_id, image=image)
+        response = self.stub.ImageDetect(request)
+        return response.tags
 
     def tensorflow_model_load(self, session_id, model_id):
         request = TF.TensorflowModelLoadRequest(session_id = session_id, model_id = model_id)

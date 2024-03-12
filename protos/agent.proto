@@ -38,6 +38,7 @@ service VaccelAgent {
 
 	// Image Classification API
 	rpc ImageClassification(ImageClassificationRequest) returns (ImageClassificationResponse);
+	rpc ImageDetect(ImageDetectRequest) returns (ImageDetectResponse);
 
 	// TensorFlow inference API
 	rpc TensorflowModelLoad(TensorflowModelLoadRequest) returns (TensorflowModelLoadResponse);
