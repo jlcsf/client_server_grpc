@@ -243,23 +243,54 @@ if __name__ == '__main__':
         response = client.image_segment(session_id, img_bytes)
         print(response.decode('utf-8'))
         
-        print("Performing genop operation(image classify)")
+        print("------------------- GENOP CLASSIFY -------------------")
+        
+        read_args = []
+        write_args = []
 
-        write_args = [Genop.GenopArg()]
+        op_value = 2 # Image classify
+        op_arg = Genop.GenopArg(argtype=1, size=4, buf=op_value.to_bytes(4, byteorder='little'))
+        read_args.append(op_arg)
+        
 
-        op_arg = Genop.GenopArg()
-        op_arg.argtype = 1
-        op_arg.buf = struct.pack('<i', 152)
-        read_args = [op_arg]
 
-        image_arg = Genop.GenopArg()
-        image_arg.argtype = 1
-        image_arg.size = len(img_bytes)
-        image_arg.buf = img_bytes
+        image_arg = Genop.GenopArg(argtype=1, size=len(img_bytes), buf=img_bytes)
         read_args.append(image_arg)
 
-        response = client.genop(session_id=session_id, read_args=read_args, write_args=write_args)
         
+        byte_data = b' ' * 100
+        for _ in range(2):
+            write_arg = Genop.GenopArg(argtype=2, size=len(byte_data), buf=byte_data)
+            write_args.append(write_arg)
+            
+        response = client.genop(session_id, read_args, write_args)
+        print(response.genop_result.write_args[0].buf)
+        print("------------------- GENOP CLASSIFY -------------------")
+
+
+        print("------------------- GENOP SEGMENTATION -------------------")
+        
+        read_args = []
+        write_args = []
+
+        op_value = 4 # Image classify
+        op_arg = Genop.GenopArg(argtype=1, size=4, buf=op_value.to_bytes(4, byteorder='little'))
+        read_args.append(op_arg)
+        
+
+
+        image_arg = Genop.GenopArg(argtype=1, size=len(img_bytes), buf=img_bytes)
+        read_args.append(image_arg)
+
+        
+        byte_data = b' ' * 100
+        for _ in range(2):
+            write_arg = Genop.GenopArg(argtype=2, size=len(byte_data), buf=byte_data)
+            write_args.append(write_arg)
+            
+        response = client.genop(session_id, read_args, write_args)
+        
+        print("------------------- GENOP SEGMENTATION -------------------")
         
         response = client.destroy_session(session_id)
         print("session destroyed")

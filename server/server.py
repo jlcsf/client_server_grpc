@@ -199,11 +199,19 @@ class VaccelService(pb2_grpc.VaccelAgentServicer):
         print("Contents of arg_read[0]:", optype)
 
         args_remaining = [VaccelArg(data = arg.buf) for arg in arg_read[1:]]
+    
+        # print("Contents of image_arg.buf:", arg_read[1].buf)
+        print("Length of image_arg.buf:", len(arg_read[1].buf))
+        
+    
         
         arg_read = [VaccelArg(data=optype)] + args_remaining
         arg_write = [VaccelArg(data = arg.buf) for arg in arg_write]
         
         response = Genop.genop(self.sess, arg_read, arg_write)
+        print("----------")
+        print("Output of response:")
+        print(response)
         print("----------")
         print(arg_write[0].content)
         print("----------")
