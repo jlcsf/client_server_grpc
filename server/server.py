@@ -200,7 +200,7 @@ class VaccelService(pb2_grpc.VaccelAgentServicer):
 
         args_remaining = [VaccelArg(data = arg.buf) for arg in arg_read[1:]]
         
-        arg_read = [VaccelArg(optype)] + args_remaining
+        arg_read = [VaccelArg(data=optype)] + args_remaining
         arg_write = [VaccelArg(data = arg.buf) for arg in arg_write]
         
         response = Genop.genop(self.sess, arg_read, arg_write)

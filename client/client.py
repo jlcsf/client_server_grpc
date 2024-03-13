@@ -2,6 +2,7 @@ import grpc
 import sys
 import time
 import io
+import struct
 
 sys.path.append("../output")
 
@@ -152,8 +153,16 @@ class VaccelClient(object):
         response = self.stub.TorchJitloadForward(request)
         return response
     
-    def genop(self, *args):
-        request = Genop.GenopRequest(*args)
+    def genop(self, session_id, read_args, write_args):
+        request = Genop.GenopRequest()
+        request.session_id = session_id
+
+        for read_arg in read_args:
+            request.read_args.append(read_arg)
+
+        for write_arg in write_args:
+            request.write_args.append(write_arg)
+
         response = self.stub.Genop(request)
         return response
     
@@ -233,6 +242,23 @@ if __name__ == '__main__':
         print("Performing image segment")
         response = client.image_segment(session_id, img_bytes)
         print(response.decode('utf-8'))
+        
+        print("Performing genop operation(image classify)")
+
+        write_args = [Genop.GenopArg()]
+
+        op_arg = Genop.GenopArg()
+        op_arg.argtype = 1
+        op_arg.buf = struct.pack('<i', 152)
+        read_args = [op_arg]
+
+        image_arg = Genop.GenopArg()
+        image_arg.argtype = 1
+        image_arg.size = len(img_bytes)
+        image_arg.buf = img_bytes
+        read_args.append(image_arg)
+
+        response = client.genop(session_id=session_id, read_args=read_args, write_args=write_args)
         
         
         response = client.destroy_session(session_id)
